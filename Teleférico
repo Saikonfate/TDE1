@@ -1,0 +1,13 @@
+<?php
+$C = intval(fgets(STDIN));
+$A = intval(fgets(STDIN));
+
+$quociente = intdiv($A, ($C - 1));
+$resto = $A % ($C - 1);
+
+$resposta = $quociente;
+if ($resto > 0) {
+    $resposta += 1;
+}
+
+echo $resposta . "\n";
