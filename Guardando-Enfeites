@@ -1,0 +1,48 @@
+<?php
+
+function fatorial($n) {
+    return $n <= 1 ? 1 : $n * fatorial($n - 1);
+}
+
+function permutacoes($arr) {
+    if (count($arr) == 1) return [$arr];
+    $perms = [];
+    for ($i = 0; $i < count($arr); $i++) {
+        $first = $arr[$i];
+        $rest = array_merge(array_slice($arr, 0, $i), array_slice($arr, $i + 1));
+        foreach (permutacoes($rest) as $perm) {
+            array_unshift($perm, $first);
+            $perms[] = $perm;
+        }
+    }
+    return $perms;
+}
+
+fscanf(STDIN, "%d", $N);
+$confianças = [];
+
+for ($i = 0; $i < $N; $i++) {
+    $confianças[$i] = array_map('intval', explode(' ', trim(fgets(STDIN))));
+}
+
+$indices = range(0, $N - 1);
+$melhorOrdem = [];
+$maxConfiança = 0;
+
+foreach (permutacoes($indices) as $ordem) {
+    $confiançaTotal = 1;
+    for ($i = 0; $i < $N; $i++) {
+        $confiançaTotal *= $confianças[$i][$ordem[$i]];
+    }
+    if ($confiançaTotal > $maxConfiança) {
+        $maxConfiança = $confiançaTotal;
+        $melhorOrdem = $ordem;
+    }
+}
+
+foreach ($melhorOrdem as &$pos) {
+    $pos++;
+}
+
+echo implode(" ", $melhorOrdem) . "\n";
+?>
